@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Code Checkout') {
             steps {
-                git 'https://github.com/your-repo/java-docker-jenkins-app.git'
+               checkout scm
+               sh 'echo "Code checked out successfully!"'
+               cd 'project1/java-docker-jenkins-app'
             }
         }
         stage('Maven Build') {
