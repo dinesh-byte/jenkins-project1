@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Code Checkout') {
+            steps {
+                git 'https://github.com/your-repo/java-docker-jenkins-app.git'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('SonarQube Testing') {
+            steps {
+                sh 'mvn sonar:sonar'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t your-image-name:latest .'
+            }
+        }
+        stage('Docker ECR Push') {
+            steps {
+                script {
+                    def awsAccountId = 'your-aws-account-id'
+                    def region = 'your-region'
+                    def repositoryName = 'your-repo-name'
+                    def imageTag = 'latest'
+
+                    sh "aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${awsAccountId}.dkr.ecr.${region}.amazonaws.com"
+                    sh "docker tag your-image-name:${imageTag} ${awsAccountId}.dkr.ecr.${region}.amazonaws.com/${repositoryName}:${imageTag}"
+                    sh "docker push ${awsAccountId}.dkr.ecr.${region}.amazonaws.com/${repositoryName}:${imageTag}"
+                }
+            }
+        }
+        stage('Deploy Container') {
+            steps {
+                sh 'docker run -d -p 9090:8080 your-image-name:latest'
+            }
+        }
+    }
+}
