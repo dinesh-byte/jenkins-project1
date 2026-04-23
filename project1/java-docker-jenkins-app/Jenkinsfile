@@ -48,7 +48,7 @@ pipeline {
         }
         stage('Deploy Container') {
             steps {
-                sh 'docker run -d -p 9090:8080 your-image-name:latest'
+                sh 'docker run -d -p 9090:9090 your-image-name:latest'
             }
         }
     }
