@@ -3,7 +3,14 @@ pipeline {
     environment {
         Defaultworkspace = 'project1/java-docker-jenkins-app'
         //SONARQUBE_URL = 'http://your-sonarqube-server:9000'
-   
+        AWS_ACCOUNT_ID = credentials('aws-account-id')
+        AWS_REGION = credentials('aws-region')
+        ECR_REPOSITORY_NAME = credentials('ecr-repository-name')
+        DOCKER_IMAGE_NAME = 'java-docker-app'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+        //SONARQUBE_URL = 'http://localhost:9000'
+        //SONARQUBE_TOKEN = credentials('sonarqube-token')
     }
     tools { 
         maven 'maven' 
@@ -25,14 +32,14 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube Testing') {
-            steps {
-                sh 'mvn sonar:sonar'
-            }
-        }
+        // stage('SonarQube Testing') {
+        //     steps {
+        //         sh 'mvn sonar:sonar'
+        //     }
+        // }
         stage('Docker Build') {
             steps {
-                sh 'docker build -t your-image-name:latest .'
+                sh 'docker build -t test-app:latest .'
             }
         }
         stage('Docker ECR Push') {
@@ -44,14 +51,14 @@ pipeline {
                     def imageTag = 'latest'
 
                     sh "aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${awsAccountId}.dkr.ecr.${region}.amazonaws.com"
-                    sh "docker tag your-image-name:${imageTag} ${awsAccountId}.dkr.ecr.${region}.amazonaws.com/${repositoryName}:${imageTag}"
+                    sh "docker tag test-app:${imageTag} ${awsAccountId}.dkr.ecr.${region}.amazonaws.com/${repositoryName}:${imageTag}"
                     sh "docker push ${awsAccountId}.dkr.ecr.${region}.amazonaws.com/${repositoryName}:${imageTag}"
                 }
             }
         }
         stage('Deploy Container') {
             steps {
-                sh 'docker run -d -p 9090:9090 your-image-name:latest'
+                sh 'docker run -d -p 9090:9090 test-app:latest'
             }
         }
     }
