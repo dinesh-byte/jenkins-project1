@@ -1,19 +1,24 @@
 pipeline {
     agent any
+    environment {
+        Defaultworkspace = 'project1/java-docker-jenkins-app'
+        SONARQUBE_URL = 'http://your-sonarqube-server:9000'
+        SONARQUBE_AUTH_TOKEN = credentials('sonarqube-auth-token')
+    }
 
     stages {
         stage('Code Checkout') {
             steps {
                checkout scm
                sh 'echo "Code checked out successfully!"'
-               
+               sh'cd ${Defaultworkspace} && ls -la' 
             }
         }
         stage('Maven Build') {
             steps {
         // 'maven-3.9.15' should match the name you gave it in Global Tool Configuration
             withMaven(maven: 'maven-3.9.15') {
-            sh "project1/java-docker-jenkins-app/mvn clean package"
+            sh "mvn clean package"
         }
     }
         }
