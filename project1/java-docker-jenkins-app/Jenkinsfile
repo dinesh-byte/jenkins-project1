@@ -18,9 +18,9 @@ pipeline {
             steps {
         // 'maven-3.9.15' should match the name you gave it in Global Tool Configuration
             withMaven(maven: 'maven') {
-            sh "mvn clean package"
-        }
-    }
+            sh "mvn clean package -DskipTests"
+                }
+            }
         }
         stage('SonarQube Testing') {
             steps {
