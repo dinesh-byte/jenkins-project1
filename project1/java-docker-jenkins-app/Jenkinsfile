@@ -6,7 +6,7 @@ pipeline {
             steps {
                checkout scm
                sh 'echo "Code checked out successfully!"'
-               cd 'project1/java-docker-jenkins-app'
+               #cd 'project1/java-docker-jenkins-app'
             }
         }
         stage('Maven Build') {
