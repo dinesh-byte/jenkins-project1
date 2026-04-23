@@ -47,8 +47,12 @@ pipeline {
                 }
             }
         }
-        stage('Docker ECR Push') {
+        stage('Login to ECR and Push') {
             steps {
+                withCredentials([[
+                $class: 'AmazonWebServicesCredentialsBinding',
+                credentialsId: 'aws-creds'
+                ]]) {
                 sh '''
                     aws ecr get-login-password --region ${AWS_REGION} | \
                     docker login --username AWS --password-stdin ${ECR_REGISTRY}
@@ -59,8 +63,11 @@ pipeline {
                     docker push ${ECR_REGISTRY}/${ECR_REPOSITORY_NAME}:${IMAGE_TAG}
                     docker push ${ECR_REGISTRY}/${ECR_REPOSITORY_NAME}:latest
                 '''
+                }
             }
         }
+
+
         stage('Deploy Container') {
             steps {
                 sh '''
