@@ -34,7 +34,7 @@ pipeline {
         }
         // stage('SonarQube Testing') {
         //     steps {
-        //         sh 'mvn sonar:sonar'
+        //  /       sh 'mvn sonar:sonar'
         //     }
         // }
         stage('Docker Build') {
