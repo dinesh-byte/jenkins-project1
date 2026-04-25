@@ -3,12 +3,12 @@ pipeline {
     environment {
         Defaultworkspace = 'project1/java-docker-jenkins-app'
         //SONARQUBE_URL = 'http://your-sonarqube-server:9000'
-        // AWS_ACCOUNT_ID = credentials('aws-account-id')
-        // AWS_REGION = credentials('aws-region')
-        // ECR_REPOSITORY_NAME = credentials('ecr-repository-name')
-         DOCKER_IMAGE_NAME = 'java-docker-app'
-         IMAGE_TAG = "${BUILD_NUMBER}"
-        // ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+        AWS_ACCOUNT_ID = credentials('aws-account-id')
+        AWS_REGION = credentials('aws-region')
+        ECR_REPOSITORY_NAME = credentials('ecr-repository-name')
+        DOCKER_IMAGE_NAME = 'java-docker-app'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ///SONARQUBE_URL = 'http://localhost:9000'
         ///SONARQUBE_TOKEN = credentials('sonarqube-token')
     }
