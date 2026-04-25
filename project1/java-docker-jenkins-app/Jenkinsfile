@@ -10,7 +10,7 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ///SONARQUBE_URL = 'http://localhost:9000'
-        //SONARQUBE_TOKEN = credentials('sonarqube-token')
+        ///SONARQUBE_TOKEN = credentials('sonarqube-token')
     }
     tools { 
         maven 'maven' 
